@@ -15,21 +15,22 @@ powerups = [];
 var highscore = localStorage.getItem("highscore") || 0;
 
 console.log(highscore);
-
 var gameState = {
+    difMultiplier: 1,
+    difficulty: "easy",
     alive: true,
     curBoringTimer: 0,
-    boringTimer: 40,
+    boringTimer: 80,
     
     spawnHulks: false,
     curHulkTimer: 0,
-    hulkTimer: 200,
+    hulkTimer: 400,
     
     spawnSwimmers: false,
     
     spawnShooters: false,
     curShooterTimer: 0,
-    shooterTimer: 300,    
+    shooterTimer: 600,    
 }
 
 //Different Guns//
@@ -39,7 +40,7 @@ var pistol = {
     name: "Pistol",
     dmg: 1,
     range: 350,
-    speed: 25,
+    speed: 15,
     reloadTime: 1,  // Higher number reloads faster
     bullets: 10,
     fireRate: 10,
@@ -54,10 +55,10 @@ var machinegun = {
     name: "Machinegun",
     dmg: 1,
     range: 250,
-    speed: 40,
+    speed: 20,
     reloadTime: 1,
     bullets: 40,
-    fireRate: 5,
+    fireRate: 3,
     fired: 0,
     reloading: false,
     clipSize: 40,
@@ -287,16 +288,16 @@ var player = {
     },
     move: function(){
         if(player.moveUp && player.y > 0){
-            player.y -= 5;
+            player.y -= 2.5 * gameState.difMultiplier;
         }
         if(player.moveRight && player.x < canvas.width - player.width){
-            player.x += 5;
+            player.x += 2.5 * gameState.difMultiplier;
         }
         if(player.moveLeft && player.x > 0){
-            player.x -= 5;
+            player.x -= 2.5 * gameState.difMultiplier;
         }
         if(player.moveDown && player.y < canvas.height - player.height ){
-            player.y += 5;
+            player.y += 2.5 * gameState.difMultiplier;
         }
     },
     checkDead: function(){
@@ -429,12 +430,12 @@ function Enemy(startX, startY, type){
             ctx.fillRect(this.x, this.y, this.width , this.height);
         };
         this.move = function(){
-            if(this.x < player.x + 3 && this.x > player.x - 3) this.x = this.x; 
-            else if(this.x > player.x) this.x -= 3;
+            if(this.x < player.x + 1.5 * gameState.difMultiplier && this.x > player.x - 1.5 * gameState.difMultiplier) this.x = this.x; 
+            else if(this.x > player.x) this.x -= 1.5 * gameState.difMultiplier;
             else this.x += 3;
-            if(this.y < player.y + 3 && this.y > player.y -3) this.y = this.y;
-            else if(this.y > player.y) this.y -= 3;
-            else this.y += 3;
+            if(this.y < player.y + 1.5 * gameState.difMultiplier && this.y > player.y -1.5 * gameState.difMultiplier) this.y = this.y;
+            else if(this.y > player.y) this.y -= 1.5 * gameState.difMultiplier;
+            else this.y += 1.5 * gameState.difMultiplier;
             this.x = Math.ceil(this.x);
             this.y = Math.ceil(this.y);
         };
@@ -448,12 +449,12 @@ function Enemy(startX, startY, type){
             ctx.fillRect(this.x, this.y, this.width , this.height);            
         };
         this.move = function(){
-            if(this.x < player.x + 2 && this.x > player.x - 2) this.x = this.x; 
-            else if(this.x > player.x) this.x -= 2;
-            else this.x += 2;
-            if(this.y < player.y + 2 && this.y > player.y -2) this.y = this.y;
-            else if(this.y > player.y) this.y -= 2;
-            else this.y += 2;
+            if(this.x < player.x + 1 * gameState.difMultiplier && this.x > player.x - 1 * gameState.difMultiplier) this.x = this.x; 
+            else if(this.x > player.x) this.x -= 1 * gameState.difMultiplier;
+            else this.x += 1 * gameState.difMultiplier;
+            if(this.y < player.y + 1 * gameState.difMultiplier && this.y > player.y - 1 * gameState.difMultiplier) this.y = this.y;
+            else if(this.y > player.y) this.y -= 1 * gameState.difMultiplier;
+            else this.y += 1 * gameState.difMultiplier;
             this.x = Math.ceil(this.x);
             this.y = Math.ceil(this.y);
         };
@@ -468,12 +469,12 @@ function Enemy(startX, startY, type){
             ctx.fillRect(this.x, this.y, this.width , this.height);            
         };
         this.move = function(){
-            if(this.x < player.x + 3 && this.x > player.x - 3) this.x = this.x; 
-            else if(this.x > player.x) this.x -= 3;
-            else this.x += 3;
-            if(this.y < player.y + 3 && this.y > player.y -3) this.y = this.y;
-            else if(this.y > player.y) this.y -= 3;
-            else this.y += 3;
+            if(this.x < player.x + 1.5 * gameState.difMultiplier && this.x > player.x - 1.5 * gameState.difMultiplier) this.x = this.x; 
+            else if(this.x > player.x) this.x -= 1.5 * gameState.difMultiplier;
+            else this.x += 1.5 * gameState.difMultiplier;
+            if(this.y < player.y + 1.5 * gameState.difMultiplier && this.y > player.y -1.5 * gameState.difMultiplier) this.y = this.y;
+            else if(this.y > player.y) this.y -= 1.5 * gameState.difMultiplier;
+            else this.y += 1.5 * gameState.difMultiplier;
             this.x = Math.ceil(this.x);
             this.y = Math.ceil(this.y);
             eProjectiles.push(new Projectile(this.x, this.y, player.x, player.y, "enemy", this));
@@ -644,12 +645,12 @@ function spawnPowerups(){
 function nextLevel(){
     //console.log("something");
     if(score.level === 2){
-        gameState.boringTimer = 30;   
+        gameState.boringTimer = 60;   
         gameState.spawnHulks = true;
     }
     else if(score.level === 3){
-        gameState.boringTimer = 20;
-        gameState.hulkTimer = 100;
+        gameState.boringTimer = 40;
+        gameState.hulkTimer = 200;
     }
     else if(score.level === 4){
         gameState.spawnShooters = true;        
@@ -675,3 +676,4 @@ function gameLoop(){
     window.requestAnimationFrame(gameLoop);
 }
 gameLoop();
+// window.setInterval(gameLoop, 30)
